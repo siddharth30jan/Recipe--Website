@@ -12,4 +12,7 @@ app.use('/',express.static(path.join(__dirname,'public')));
 
 
 
-app.listen(4356);
+var port=Number(process.env.PORT || 3000);
+app.listen(port,function(){
+    console.log("App is running");
+});
