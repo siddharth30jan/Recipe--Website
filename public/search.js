@@ -206,6 +206,7 @@ $(function(){
     button.click(function(event){
        event.preventDefault();
         //console.log("Clicked!!!");
+        recipe_box.empty();
        box.empty();
        //This is the loader!!!!
        box.append(`<div class="loader">   
@@ -216,6 +217,12 @@ $(function(){
        $.get(`${proxy}https://www.food2fork.com/api/search?key=${key}&q=${query.val()}`,function(result){
         let pop=JSON.parse(result); //Converted the json string into an object
         box.empty();
+        console.log(pop);
+        if(pop.count===0)
+        {
+            //console.log("Not found!")
+            recipe_box.append(`<h1>Sorry,we donot serve this dish yet!<br> Try anything else</h1>`)
+        }
         //console.log(pop);
         for(item of pop.recipes){
             box.append(`<li>
