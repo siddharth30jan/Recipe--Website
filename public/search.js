@@ -5,16 +5,29 @@ $(function(){
     let proxy='https://cors-anywhere.herokuapp.com/';
     let key='a676b40f9c0d7ae8cab6f1f0697c9ad9';
     let recipe_box=$(".recipe");
-    
+    let shopping_list;
+        let addbutton;
+        let name_recipe=[];
 
     //Recipe box!!
     window.addEventListener('hashchange',function(){
+        //Loader
+        recipe_box.empty();
+        recipe_box.append(`<div class="loader">   
+       <svg>
+           <use href="img/icons.svg#icon-cw"></use>
+       </svg>
+       </div>`);
         const id=window.location.hash.replace('#','');
        // console.log(id);
+      
         $.get(`${proxy}https://www.food2fork.com/api/get?key=${key}&rId=${id}`,function(result){
             let data=JSON.parse(result);
-            console.log(data);
-            let recipe=data.recipe;
+           // console.log(data);
+           
+             let recipe=data.recipe;
+             name_recipe.push(recipe.title);
+             console.log(name_recipe);
             recipe_box.empty();
             recipe_box.append(` <figure class="recipe__fig">
             <img src="${recipe.image_url}" alt="${recipe.title}" class="recipe__img">
@@ -101,7 +114,7 @@ $(function(){
                     </li>
                 </ul>
 
-                <button class="btn-small recipe__btn">
+                <button id="choot" class="btn-small recipe__btn">
                     <svg class="search__icon">
                         <use href="img/icons.svg#icon-shopping-cart"></use>
                     </svg>
@@ -124,6 +137,8 @@ $(function(){
             </a>
         </div>`)
 
+       
+
         //INgridents box!!
         let ingridient_box=$(".recipe__ingredient-list"); //IMP***   After the page has actually rendered, uske bad utha rha hoon!!
         ingridient_box.empty();
@@ -139,13 +154,54 @@ $(function(){
             </div>
         </li>`)
         }
-        })
+       
 
-        
-        
+        //Shopping List!!
+        shopping_list=$(".shopping__list");
+        addbutton=$('#choot');
+        console.log("FIRSt");
+     /*   shopping_list.append(`
+            <li class="shopping__item">
+                        <div class="shopping__count">
+                            <input type="number" value="1" step="1">
+                        </div>
+                        <p class="shopping__description">${name_recipe[0]}</p>
+                    </li>
+            `)*/
+        addbutton.click(function(){
+            console.log("CLICKED!!!")
+            console.log(name_recipe.length);
+            shopping_list.empty();
+            for(temp of name_recipe)
+            {
+                shopping_list.append(`
+                <li class="shopping__item">
+                            <div class="shopping__count">
+                                <input type="number" value="500" step="100">
+                                <p>g</p>
+                            </div>
+                            <p class="shopping__description">${temp}</p>
+                            <button class="shopping__delete btn-tiny">
+                                <svg>
+                                    <use href="img/icons.svg#icon-circle-with-cross"></use>
+                                </svg>
+                            </button>
+                        </li>
+                `)
+            }
+           
+        })      
 
     })
 
+
+
+        })
+       // console.log(name_recipe.length);
+        
+        
+   
+   
         //Search
     button.click(function(event){
        event.preventDefault();
